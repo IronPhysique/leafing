@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSource } from "@/lib/sources";
+import { getSeriesCached } from "@/lib/sources";
 import { proxiedImage } from "@/lib/proxy";
 import { isFollowed, getCategories } from "@/lib/library";
 import { getProgressForSeries, getDownloadsForSeries } from "@/lib/queries";
@@ -20,7 +20,7 @@ export default async function SeriesPage({
 }) {
   const { source, slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
-  const detail = await getSource(source).getSeries(slug);
+  const detail = await getSeriesCached(source, slug);
 
   const [followed, progress, downloads, libraryEntry, allCategories] = await Promise.all([
     isFollowed(source, slug),

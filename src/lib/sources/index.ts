@@ -1,5 +1,5 @@
 import { cached } from "../cache";
-import type { Source, SourceSeriesSummary, SearchOptions } from "./types";
+import type { Source, SourceSeriesSummary, SourceSeriesDetail, SearchOptions } from "./types";
 import { mangadex } from "./mangadex";
 import { flamecomics } from "./flamecomics";
 import { comick } from "./comick";
@@ -22,6 +22,14 @@ export function getSource(id: string): Source {
 
 export function listSources(): Source[] {
   return Object.values(SOURCES);
+}
+
+const SERIES_DETAIL_TTL_S = 600;
+
+export function getSeriesCached(sourceId: string, slug: string): Promise<SourceSeriesDetail> {
+  return cached(`series:${sourceId}:${slug}`, SERIES_DETAIL_TTL_S, () =>
+    getSource(sourceId).getSeries(slug),
+  );
 }
 
 export function sourceBadge(source: Source): string {
