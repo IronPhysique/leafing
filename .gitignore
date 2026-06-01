@@ -1,0 +1,19 @@
+node_modules
+.next
+out
+.env
+.env.local
+data/
+*.log
+.DS_Store
+# Playwright
+playwright-report/
+test-results/
+e2e/.env.e2e
+
+# build/orchestration artifacts
+docs/
+tsconfig.tsbuildinfo
+
+# local agent/editor config
+.claude/
