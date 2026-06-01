@@ -11,6 +11,7 @@ interface Entry {
   titleRomaji: string | null;
   coverUrl: string | null;
   coverReferer: string | null;
+  resumeRef?: string | null;
 }
 
 interface Props {
@@ -43,13 +44,17 @@ export function CurrentlyReadingShelf({ entries }: Props) {
               romaji: e.titleRomaji ?? undefined,
             }) || e.title;
 
+          const href = e.resumeRef
+            ? `/read/${e.sourceId}/${encodeURIComponent(e.slug)}/${encodeURIComponent(e.resumeRef)}`
+            : `/series/${e.sourceId}/${encodeURIComponent(e.slug)}`;
+
           return (
             <div
               key={e.id}
               className="w-28 flex-none snap-start"
             >
               <Cover
-                href={`/series/${e.sourceId}/${encodeURIComponent(e.slug)}`}
+                href={href}
                 title={displayTitle}
                 coverUrl={e.coverUrl ?? undefined}
                 coverReferer={e.coverReferer ?? undefined}

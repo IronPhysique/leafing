@@ -48,6 +48,8 @@ export function Reader({
   chapterRef,
   chapterNumber,
   seriesTitle,
+  coverUrl,
+  coverReferer,
   pages,
   startPage,
   startScrollOffset = 0,
@@ -62,6 +64,8 @@ export function Reader({
   chapterRef: string;
   chapterNumber: string;
   seriesTitle: string;
+  coverUrl?: string;
+  coverReferer?: string;
   pages: Page[];
   startPage: number;
   startScrollOffset?: number;
@@ -156,10 +160,19 @@ export function Reader({
         scrollOffset,
         finished,
         isLatestChapter: isLatest,
+        title: seriesTitle,
+        coverUrl,
+        coverReferer,
       });
     },
-    [source, slug, chapterRef, chapterNumber, isLatest],
+    [source, slug, chapterRef, chapterNumber, isLatest, seriesTitle, coverUrl, coverReferer],
   );
+
+  useEffect(() => {
+    // Opening a chapter auto-tracks the series and records the resume point.
+    persist(startPage, startScrollOffset, startPage >= total - 1 && total > 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (currentPage !== lastSaved.current) {

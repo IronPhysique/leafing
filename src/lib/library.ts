@@ -82,6 +82,9 @@ export async function setProgress(input: {
   scrollOffset?: number;
   finished?: boolean;
   isLatestChapter?: boolean;
+  title?: string;
+  coverUrl?: string;
+  coverReferer?: string;
 }): Promise<void> {
   const profileId = await requireProfileId();
   const { sourceId, slug, chapterRef } = input;
@@ -106,13 +109,29 @@ export async function setProgress(input: {
     },
   });
 
-  await prisma.libraryEntry.updateMany({
-    where: { profileId, sourceId, slug },
-    data: {
-      lastReadAt: new Date(),
-      ...(input.isLatestChapter ? { unreadCount: 0 } : {}),
-    },
-  });
+  const lastReadAt = new Date();
+  const unreadPatch = input.isLatestChapter ? { unreadCount: 0 } : {};
+
+  if (input.title) {
+    await prisma.libraryEntry.upsert({
+      where: { profileId_sourceId_slug: { profileId, sourceId, slug } },
+      create: {
+        profileId,
+        sourceId,
+        slug,
+        title: input.title,
+        coverUrl: input.coverUrl,
+        coverReferer: input.coverReferer,
+        lastReadAt,
+      },
+      update: { lastReadAt, ...unreadPatch },
+    });
+  } else {
+    await prisma.libraryEntry.updateMany({
+      where: { profileId, sourceId, slug },
+      data: { lastReadAt, ...unreadPatch },
+    });
+  }
 }
 
 export async function clearUnread(sourceId: string, slug: string): Promise<void> {

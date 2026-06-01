@@ -37,19 +37,19 @@ export async function getCurrentlyReadingEntries() {
 
   const inProgress = await prisma.readProgress.findMany({
     where: { profileId, finished: false },
-    select: { sourceId: true, slug: true, updatedAt: true },
+    select: { sourceId: true, slug: true, chapterRef: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
 
   if (inProgress.length === 0) return [];
 
   const seen = new Set<string>();
-  const deduped: { sourceId: string; slug: string }[] = [];
+  const deduped: { sourceId: string; slug: string; chapterRef: string }[] = [];
   for (const row of inProgress) {
     const key = `${row.sourceId}:${row.slug}`;
     if (!seen.has(key)) {
       seen.add(key);
-      deduped.push({ sourceId: row.sourceId, slug: row.slug });
+      deduped.push({ sourceId: row.sourceId, slug: row.slug, chapterRef: row.chapterRef });
     }
   }
 
@@ -61,13 +61,15 @@ export async function getCurrentlyReadingEntries() {
   });
 
   const indexMap = new Map(deduped.map((d, i) => [`${d.sourceId}:${d.slug}`, i]));
+  const resumeMap = new Map(deduped.map((d) => [`${d.sourceId}:${d.slug}`, d.chapterRef]));
   return entries
     .filter((e) => indexMap.has(`${e.sourceId}:${e.slug}`))
     .sort(
       (a, b) =>
         (indexMap.get(`${a.sourceId}:${a.slug}`) ?? 999) -
         (indexMap.get(`${b.sourceId}:${b.slug}`) ?? 999)
-    );
+    )
+    .map((e) => ({ ...e, resumeRef: resumeMap.get(`${e.sourceId}:${e.slug}`) ?? null }));
 }
 
 export async function getDownloadsForSeries(sourceId: string, slug: string) {

@@ -1,4 +1,4 @@
-import { getSource } from "@/lib/sources";
+import { getSource, getSeriesCached } from "@/lib/sources";
 import { prisma } from "@/lib/db";
 import { proxiedImage } from "@/lib/proxy";
 import { getChapterProgress } from "@/lib/queries";
@@ -18,7 +18,7 @@ export default async function ReaderPage({
   const ref = decodeURIComponent(rawRef);
   const src = getSource(source);
 
-  const detail = await src.getSeries(slug);
+  const detail = await getSeriesCached(source, slug);
   const idx = detail.chapters.findIndex((c) => c.ref === ref);
   const current = detail.chapters[idx];
   const next = idx > 0 ? detail.chapters[idx - 1] : undefined;
@@ -48,7 +48,7 @@ export default async function ReaderPage({
   let nextChapterFirstPages: string[] | undefined;
   if (next) {
     try {
-      const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000));
+      const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500));
       const result = await Promise.race([
         src.getChapter(slug, next.ref).then((ch) => ch.pages.slice(0, 3)),
         timeout,
@@ -68,6 +68,8 @@ export default async function ReaderPage({
       chapterRef={ref}
       chapterNumber={current?.number ?? ""}
       seriesTitle={detail.title}
+      coverUrl={detail.coverUrl}
+      coverReferer={detail.coverReferer}
       pages={pages}
       startPage={progress && !progress.finished ? progress.page : 0}
       startScrollOffset={progress && !progress.finished ? progress.scrollOffset : 0}
