@@ -23,7 +23,6 @@ export async function removeProfile(id: string): Promise<void> {
   const profiles = await listProfiles();
   if (profiles.length <= 1) throw new Error("Cannot delete the last profile.");
   await deleteProfile(id);
-  // If the deleted profile was active, switch to the first remaining one.
   const activeId = await getActiveProfileId();
   if (activeId === id) {
     const remaining = profiles.find((p) => p.id !== id);

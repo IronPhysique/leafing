@@ -14,7 +14,6 @@ interface Props {
   slug: string;
   categories: Category[];
   assignedIds: string[];
-  /** Whether the series is currently in the library (unfollowed entries can't be categorised). */
   followed: boolean;
 }
 
@@ -24,12 +23,10 @@ export function CategoryPicker({ sourceId, slug, categories, assignedIds, follow
   const [pending, startTransition] = useTransition();
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Sync when parent re-renders (e.g. after follow/unfollow)
   useEffect(() => {
     setSelected(new Set(assignedIds));
   }, [assignedIds.join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
     function handler(e: MouseEvent) {

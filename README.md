@@ -74,16 +74,19 @@ on the dev setup; `make prod` runs the base file only.
 ## Architecture notes
 
 ```
-app/            App Router pages + API routes (img proxy, sources, downloads, search)
-components/     Reader, Cover, FeaturedBar, CommandPalette, SearchControls, …
-lib/
-  sources/      Source adapters (mangadex, flamecomics, comick, weebcentral, asurascans) + registry
-  metadata/     AniList title resolution (behind a mockable interface)
-  library.ts    Server actions (follow, progress, categories) — profile-scoped
-  queries.ts    Read helpers for server components
-  queue.ts      BullMQ queues + Redis connection
-  profile.ts    Active-profile resolution (cookie-based)
-worker/         BullMQ workers: chapter downloads + update polling
+src/
+  app/          App Router pages + API routes (img proxy, sources, downloads, search)
+  components/   Reader, Cover, FeaturedBar, CommandPalette, SearchControls, …
+  lib/
+    sources/    Source adapters (mangadex, flamecomics, comick, weebcentral, asurascans) + registry
+    metadata/   AniList title resolution (behind a mockable interface)
+    library.ts  Server actions (follow, progress, categories) — profile-scoped
+    queries.ts  Read helpers for server components
+    queue.ts    BullMQ queues + Redis connection
+    cache.ts    Redis cache-aside helper (best-effort)
+    profile.ts  Active-profile resolution (cookie-based)
+  worker/       BullMQ workers: chapter downloads + update polling
+  middleware.ts Profile-cookie gate
 prisma/         Schema + migrations
 e2e/            Playwright end-to-end specs
 ```
@@ -119,4 +122,6 @@ you point it at. Don't deploy it as a public service.
 
 ## License
 
-[MIT](LICENSE)
+Personal use only. You're free to run and modify your own local copy for
+personal, non-commercial use. Hosting it as a public or shared service, and any
+commercial use, are not permitted. See [LICENSE](LICENSE) for the full terms.

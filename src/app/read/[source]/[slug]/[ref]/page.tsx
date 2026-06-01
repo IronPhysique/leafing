@@ -57,7 +57,7 @@ export default async function ReaderPage({
         nextChapterFirstPages = result.map((p) => proxiedImage(p.url, p.referer, p.descramble));
       }
     } catch {
-      // intentionally empty
+      nextChapterFirstPages = undefined;
     }
   }
 

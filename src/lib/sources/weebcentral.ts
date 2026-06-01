@@ -89,16 +89,13 @@ interface WcSearchResult {
 
 function parseSearchResults(html: string): WcSearchResult[] {
   const results: WcSearchResult[] = [];
-  // Split on <article class="bg-base-300 ..."> boundaries
   const articleParts = html.split(/<article\s[^>]*bg-base-300[^>]*>/);
   for (const part of articleParts.slice(1)) {
-    // First series link in the article
     const hrefMatch = /href="https:\/\/weebcentral\.com\/series\/([A-Z0-9]+)\/([^"]+)"/.exec(part);
     if (!hrefMatch) continue;
     const ulid = hrefMatch[1];
     const nameSlug = hrefMatch[2];
 
-    // Title: look for the line-clamp-1 link (desktop display section)
     const titleMatch = /class="line-clamp-1 link link-hover"[^>]*>([^<]+)</.exec(part);
     const title = titleMatch ? decodeEntities(titleMatch[1].trim()) : nameSlug.replace(/-/g, " ");
 

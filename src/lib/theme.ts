@@ -106,8 +106,6 @@ const _OLED_JSON = JSON.stringify(OLED_OVERRIDES);
 export const THEME_INIT_SCRIPT = `
 (function(){
   try {
-    // Derive profileId from the <html data-profile> attribute (httpOnly cookie
-    // isn't readable here) so prefs are per-profile.
     var pid = document.documentElement.getAttribute('data-profile') || '';
     function pk(key) { return pid ? key + '::' + pid : key; }
 
