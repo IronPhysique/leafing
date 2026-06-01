@@ -114,12 +114,3 @@ model KnownChapter {
   @@unique([sourceId, slug, chapterRef])
   @@index([sourceId, slug])
 }
-
-model SourceCache {
-  key       String   @id
-  value     Json
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@index([expiresAt])
-}

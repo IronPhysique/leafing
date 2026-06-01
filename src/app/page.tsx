@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { unstable_cache } from "next/cache";
+import { cached } from "@/lib/cache";
 import { prisma } from "@/lib/db";
 import { getLibrary, getUnreadEntries } from "@/lib/queries";
 import { getActiveProfileId } from "@/lib/profile";
@@ -19,13 +19,11 @@ import { proxiedImage } from "@/lib/proxy";
 import { humanizeSlug, sourceHue } from "@/lib/pageHelpers";
 import type { LibraryEntry } from "@prisma/client";
 
-const getCachedSeriesDetail = unstable_cache(
-  async (sourceId: string, slug: string) => {
-    return getSource(sourceId).getSeries(slug);
-  },
-  ["spotlight-series-detail"],
-  { revalidate: 3600 },
-);
+function getCachedSeriesDetail(sourceId: string, slug: string) {
+  return cached(`spotlight-detail:${sourceId}:${slug}`, 3600, () =>
+    getSource(sourceId).getSeries(slug),
+  );
+}
 
 export const dynamic = "force-dynamic";
 

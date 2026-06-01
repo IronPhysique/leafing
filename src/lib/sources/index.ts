@@ -1,4 +1,4 @@
-import { unstable_cache } from "next/cache";
+import { cached } from "../cache";
 import type { Source, SourceSeriesSummary, SearchOptions } from "./types";
 import { mangadex } from "./mangadex";
 import { flamecomics } from "./flamecomics";
@@ -101,8 +101,6 @@ async function _popularBySource(perSource: number): Promise<PopularSourceShelf[]
   return out;
 }
 
-export const popularBySource = unstable_cache(
-  _popularBySource,
-  ["popular-by-source"],
-  { revalidate: 3600 },
-);
+export function popularBySource(perSource = 5): Promise<PopularSourceShelf[]> {
+  return cached(`popular:by-source:${perSource}`, 3600, () => _popularBySource(perSource));
+}

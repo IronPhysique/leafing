@@ -1,4 +1,4 @@
-import { unstable_cache } from "next/cache";
+import { cached } from "./cache";
 import { popularBySource, getSource } from "./sources/index";
 import type { AggregatedSeriesSummary } from "./sources/index";
 import type { SourceSeriesDetail } from "./sources/types";
@@ -55,8 +55,10 @@ export async function spotlightSeries(): Promise<SpotlightSeries | null> {
 
   const { sourceId, slug, title, coverUrl, coverReferer } = top;
 
-  const fetchDetail = unstable_cache(
-    async (): Promise<SourceSeriesDetail | null> => {
+  const detail = await cached<SourceSeriesDetail | null>(
+    `spotlight-detail:${sourceId}:${slug}`,
+    3600,
+    async () => {
       try {
         const source = getSource(sourceId);
         return await source.getSeries(slug);
@@ -64,11 +66,7 @@ export async function spotlightSeries(): Promise<SpotlightSeries | null> {
         return null;
       }
     },
-    [`spotlight-detail:${sourceId}:${slug}`],
-    { revalidate: 3600 },
   );
-
-  const detail = await fetchDetail();
 
   return {
     sourceId,
