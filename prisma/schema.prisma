@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+
+  libraryEntries LibraryEntry[]
+  readProgresses ReadProgress[]
+  categories     Category[]
+}
+
+model LibraryEntry {
+  id           String    @id @default(cuid())
+  profileId    String
+  profile      Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  sourceId     String
+  slug         String
+  title        String
+  coverUrl     String?
+  coverReferer String?
+  addedAt      DateTime  @default(now())
+  lastReadAt   DateTime?
+
+  titleEnglish  String?
+  titleRomaji   String?
+  titleNative   String?
+  anilistId     Int?
+  unreadCount   Int       @default(0)
+  lastCheckedAt DateTime?
+
+  categories LibraryEntryCategory[]
+
+  @@unique([profileId, sourceId, slug])
+  @@index([profileId])
+  @@index([lastReadAt])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  entries LibraryEntryCategory[]
+
+  @@unique([profileId, name])
+  @@index([profileId])
+}
+
+model LibraryEntryCategory {
+  libraryEntry   LibraryEntry @relation(fields: [libraryEntryId], references: [id], onDelete: Cascade)
+  libraryEntryId String
+  category       Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId     String
+
+  @@id([libraryEntryId, categoryId])
+}
+
+model ReadProgress {
+  id            String   @id @default(cuid())
+  profileId     String
+  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  sourceId      String
+  slug          String
+  chapterRef    String
+  chapterNumber String?
+  page          Int      @default(0)
+  scrollOffset  Int      @default(0)
+  finished      Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  @@unique([profileId, sourceId, slug, chapterRef])
+  @@index([profileId])
+  @@index([sourceId, slug])
+}
+
+model Download {
+  id         String   @id @default(cuid())
+  sourceId   String
+  slug       String
+  chapterRef String
+  title      String?
+  status     String   @default("queued")
+  pageCount  Int?
+  localDir   String?
+  error      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([sourceId, slug, chapterRef])
+  @@index([sourceId, slug])
+  @@index([status])
+}
+
+model KnownChapter {
+  id           String   @id @default(cuid())
+  sourceId     String
+  slug         String
+  chapterRef   String
+  number       String
+  firstSeenAt  DateTime @default(now())
+
+  @@unique([sourceId, slug, chapterRef])
+  @@index([sourceId, slug])
+}
+
+model SourceCache {
+  key       String   @id
+  value     Json
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
