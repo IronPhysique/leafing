@@ -1,10 +1,25 @@
 # Leafing
 
+[![CI](https://github.com/IronPhysique/leafing/actions/workflows/ci.yml/badge.svg)](https://github.com/IronPhysique/leafing/actions/workflows/ci.yml)
+
 A self-hosted manga/manhwa reader. Search several public aggregators from one
 place, follow series into a per-profile library, track reading progress, and
 read in-app (with optional offline downloads). Runs entirely in Docker.
 
 > Personal/educational project. See [Disclaimer](#disclaimer).
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><b>Home</b> — featured bar, spotlight, and your continue-reading shelf<br/><img src="screenshots/home.png" alt="Leafing home page" /></td>
+    <td width="50%"><b>Search</b> — one query across every source at once<br/><img src="screenshots/search.png" alt="Multi-source search" /></td>
+  </tr>
+  <tr>
+    <td><b>Series detail</b> — synopsis, tags, and the full chapter list<br/><img src="screenshots/series.png" alt="Series detail page" /></td>
+    <td><b>Settings</b> — accent themes, reader defaults, keyboard shortcuts<br/><img src="screenshots/settings.png" alt="Settings page" /></td>
+  </tr>
+</table>
 
 ## Stack
 
