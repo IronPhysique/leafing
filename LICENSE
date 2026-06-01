@@ -1,16 +1,55 @@
-MIT License
+Leafing Personal Use License
 
-Copyright (c) 2026 Ryan Kilpatrick
+Copyright (c) 2026 IronPhysique
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Grant
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software") to use, copy,
+and modify the Software solely for that person's own personal, private, and
+non-commercial purposes, and only on hardware that they own or control, subject
+to the conditions and restrictions below.
+
+2. Restrictions
+
+The following are NOT permitted under this license:
+
+ (a) Hosting, deploying, serving, or otherwise making the Software, or any
+     modified or derivative version of it, available to any other person or to
+     the public over a network or as a hosted, shared, or multi-user service,
+     whether free of charge or for a fee.
+
+ (b) Any commercial use, including use for or within the operations of a
+     business or organization, use intended for or directed toward commercial
+     advantage, or use in exchange for monetary or other compensation.
+
+ (c) Selling, sublicensing, renting, leasing, or distributing the Software or
+     any modified or derivative version of it to any third party.
+
+For the avoidance of doubt: running a personal, local copy for your own use is
+permitted; standing up a website, instance, or service that other people can
+access is not.
+
+3. Conditions
+
+The above copyright notice, this permission notice, and the restrictions in
+Section 2 shall be included in all copies or substantial portions of the
+Software. You may submit modifications back to the original project, which does
+not waive any restriction in this license.
+
+4. Third-Party Content and Compliance
+
+The Software is a tool that can be pointed at third-party services. No rights to
+any third-party content, trademarks, or services are granted by this license.
+You are solely responsible for how you use the Software and for complying with
+the terms of service of any source you access and with all applicable laws.
+
+5. Reservation of Rights
+
+All rights not expressly granted in this license are reserved by the copyright
+holder.
+
+6. Disclaimer of Warranty and Limitation of Liability
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
