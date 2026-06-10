@@ -27,8 +27,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
-    command: npm run worker
+      target: prod
+    command: npm run worker:prod
     working_dir: /app
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-manhwa}:${POSTGRES_PASSWORD:-manhwa}@db:5432/${POSTGRES_DB:-manhwa}

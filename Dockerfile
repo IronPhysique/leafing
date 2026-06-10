@@ -24,5 +24,8 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/next.config.ts ./next.config.ts
+# The worker runs from source via tsx, so the prod image needs src/ too
+COPY --from=build /app/src ./src
+COPY --from=build /app/tsconfig.json ./tsconfig.json
 EXPOSE 3000
 CMD ["npm", "run", "start"]
